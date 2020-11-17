@@ -3,6 +3,10 @@ name = "bit_fiddler"
 version = "0.1.0"
 authors = ["Mihir Luthra <luthramihir708@gmail.com>"]
 edition = "2018"
+description = "Macros for Common bit operations with multiple convenient patterns. WIP"
+license = "MIT OR Apache-2.0"
+documentation = "https://docs.rs/bit_fiddler"
+repository = "https://github.com/MihirLuthra/bit_fiddler"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
