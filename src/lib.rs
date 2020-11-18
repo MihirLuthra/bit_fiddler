@@ -13,10 +13,10 @@
 //! # Example
 //!
 //! ```
-//! use bit_fiddler::set_bmp;
+//! use bit_fiddler::set;
 //!
 //! let mut bitmap: u8 = 0b_0000_0000;
-//! set_bmp!(in bitmap, [3..6]);
+//! set!(in bitmap, [3..6]);
 //! assert_eq!(bitmap, 0b_0011_1000);
 //! ```
 

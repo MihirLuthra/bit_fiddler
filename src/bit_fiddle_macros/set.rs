@@ -11,7 +11,7 @@
 /// ```
 /// # macro_rules! dont_test_but_have_syntax_highlighting { () => {
 /// let bitmap: u8 = 0b_0000_0000;
-/// let res = set_bmp!(bitmap, ...);
+/// let res = set!(bitmap, ...);
 /// assert_eq!(bitmap, 0b_0000_0000); // Stays same
 /// println!("{:#b}", res); // new bitmap with set bits
 /// # }}
@@ -22,7 +22,7 @@
 /// ```
 /// # macro_rules! dont_test_but_have_syntax_highlighting { () => {
 /// // bits will be set on 0b_0000_0101 and moved to res
-/// let res = set_bmp!(0b_0000_0101, ...);
+/// let res = set!(0b_0000_0101, ...);
 /// # }}
 /// ```
 ///
@@ -33,7 +33,7 @@
 /// ```
 /// # macro_rules! dont_test_but_have_syntax_highlighting { () => {
 /// let mut bitmap = 0b_0000_0000;
-/// set_bmp!(in bitmap, ...);
+/// set!(in bitmap, ...);
 /// // bits were set in bitmap
 /// # }}
 /// ```
@@ -45,15 +45,15 @@
 /// For example,
 ///
 /// ```
-/// # use bit_fiddler::set_bmp;
+/// # use bit_fiddler::set;
 /// let mut bitmap: u8 = 0;
 ///
 /// // Setting 2nd bit from rhs
-/// set_bmp!(in bitmap, 2);
+/// set!(in bitmap, 2);
 /// assert_eq!(bitmap, 0b_0000_0100);
 ///
 /// // Setting 2nd bit from lhs
-/// set_bmp!(in bitmap, rev 2);
+/// set!(in bitmap, rev 2);
 /// assert_eq!(bitmap, 0b_0010_0100);
 /// ```
 ///
@@ -64,93 +64,93 @@
 ///
 /// # Examples
 /// ```
-/// use bit_fiddler::set_bmp;
+/// use bit_fiddler::set;
 ///
 /// // Set third bit from the right and return the resulting bitmap.
 /// let bitmap = 0;
-/// let x = set_bmp!(bitmap, 2);
+/// let x = set!(bitmap, 2);
 /// assert_eq!(x, 0b100);
 ///
 /// // Set third bit from the right in the passed bitmap itself.
 /// let mut bitmap = 0;
-/// set_bmp!(in bitmap, 2);
+/// set!(in bitmap, 2);
 /// assert_eq!(bitmap, 0b100);
 ///
 /// // Set third bit from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0;
-/// let x = set_bmp!(bitmap, rev 2);
+/// let x = set!(bitmap, rev 2);
 /// assert_eq!(x, 0b_0010_0000);
 ///
 /// // Set third bit from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0;
-/// set_bmp!(in bitmap, rev 2);
+/// set!(in bitmap, rev 2);
 /// assert_eq!(bitmap, 0b_0010_0000);
 ///
 /// // Set second, third & fourth bit from the right and return the resulting bitmap.
 /// let bitmap = 0;
-/// let x = set_bmp!(bitmap, [1, 2, 3]);
+/// let x = set!(bitmap, [1, 2, 3]);
 /// assert_eq!(x, 0b1110);
 ///
 /// // Set second, third & fourth bit from the right in the passed bitmap itself.
 /// let mut bitmap = 0;
-/// set_bmp!(in bitmap, [1, 2, 3]);
+/// set!(in bitmap, [1, 2, 3]);
 /// assert_eq!(bitmap, 0b1110);
 ///
 /// // Set second, third & fourth bit from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0;
-/// let x = set_bmp!(bitmap, rev [1, 2, 3]);
+/// let x = set!(bitmap, rev [1, 2, 3]);
 /// assert_eq!(x, 0b0111_0000);
 ///
 /// // Set second, third & fourth bit from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0;
-/// set_bmp!(in bitmap, rev [1, 2, 3]);
+/// set!(in bitmap, rev [1, 2, 3]);
 /// assert_eq!(bitmap, 0b0111_0000);
 ///
 /// // Set second & third (1 and 2) bit from the right and return the resulting bitmap.
 /// let bitmap = 0;
-/// let x = set_bmp!(bitmap, [1..3]);
+/// let x = set!(bitmap, [1..3]);
 /// assert_eq!(x, 0b110);
 ///
 /// // Set second & third bit (1 and 2) from the right in the passed bitmap itself.
 /// let mut bitmap = 0;
-/// set_bmp!(in bitmap, [1..3]);
+/// set!(in bitmap, [1..3]);
 /// assert_eq!(bitmap, 0b110);
 ///
 /// // Starting from second bit, set 2 bits from the right and return the resulting bitmap.
 /// let bitmap = 0;
-/// let x = set_bmp!(bitmap, [start = 1, count = 2]);
+/// let x = set!(bitmap, [start = 1, count = 2]);
 /// assert_eq!(x, 0b110);
 ///
 /// // Starting from second bit, set 2 bits from the right in the passed bitmap itself.
 /// let mut bitmap = 0;
-/// set_bmp!(in bitmap, [start = 1, count = 2]);
+/// set!(in bitmap, [start = 1, count = 2]);
 /// assert_eq!(bitmap, 0b110);
 ///
 /// // Set second & third bit (1 and 2) from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0;
-/// let x = set_bmp!(bitmap, rev [1..3]);
+/// let x = set!(bitmap, rev [1..3]);
 /// assert_eq!(x, 0b_0110_0000);
 ///
 /// // Set second & third bit (1 and 2) from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0;
-/// set_bmp!(in bitmap, rev [1..3]);
+/// set!(in bitmap, rev [1..3]);
 /// assert_eq!(bitmap, 0b_0110_0000);
 /// 
 /// // Starting from second bit, set 2 bits from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0;
-/// let x = set_bmp!(bitmap, rev [start = 1, count = 2]);
+/// let x = set!(bitmap, rev [start = 1, count = 2]);
 /// assert_eq!(x, 0b_0110_0000);
 ///
 /// // Starting from second bit, set 2 bits from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0;
-/// set_bmp!(in bitmap, rev [start = 1, count = 2]);
+/// set!(in bitmap, rev [start = 1, count = 2]);
 /// assert_eq!(bitmap, 0b_0110_0000);
 /// 
 /// ```
 #[macro_export]
-macro_rules! set_bmp { 
+macro_rules! set { 
     // let bitmap = 0;
-    // let x = set_bmp!(bitmap, [1, 2, 3]);
+    // let x = set!(bitmap, [1, 2, 3]);
     // assert_eq!(x, 0b1110);
     ($bitmap: tt, [$( $bit_pos: tt),*]) => {
         {
@@ -159,7 +159,7 @@ macro_rules! set_bmp {
         }
     };
     // let mut bitmap = 0;
-    // set_bmp!(in bitmap, [1, 2, 3]);
+    // set!(in bitmap, [1, 2, 3]);
     // assert_eq!(bitmap, 0b1110);
     (in $bitmap: ident, [$( $bit_pos: tt),*]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -167,7 +167,7 @@ macro_rules! set_bmp {
     };
 
     // let bitmap: u8 = 0;
-    // let x = set_bmp!(bitmap, rev [1, 2, 3]);
+    // let x = set!(bitmap, rev [1, 2, 3]);
     // assert_eq!(x, 0b0111_0000);
     ($bitmap: tt, rev [$( $bit_pos: tt),*]) => {
         {
@@ -177,7 +177,7 @@ macro_rules! set_bmp {
         }
     };
     // let mut bitmap: u8 = 0;
-    // set_bmp!(bitmap, rev [1, 2, 3]);
+    // set!(bitmap, rev [1, 2, 3]);
     // assert_eq!(bitmap, 0b0111_0000);
     (in $bitmap: tt, rev [$( $bit_pos: tt),*]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -186,7 +186,7 @@ macro_rules! set_bmp {
     };
 
     // let bitmap = 0;
-    // let x = set_bmp!(bitmap, [1..3]);
+    // let x = set!(bitmap, [1..3]);
     // assert_eq!(x, 0b110);
     ($bitmap: ident, [$start_pos: tt .. $end_pos: tt]) => {
         {
@@ -197,7 +197,7 @@ macro_rules! set_bmp {
     };
 
     // let mut bitmap = 0;
-    // set_bmp!(in bitmap, [1..3]);
+    // set!(in bitmap, [1..3]);
     // assert_eq!(bitmap, 0b110);
     (in $bitmap: ident, [$start_pos: tt .. $end_pos: tt]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -206,7 +206,7 @@ macro_rules! set_bmp {
     };
 
     // let bitmap = 0;
-    // let x = set_bmp!(bitmap, [start = 1, count = 2]);
+    // let x = set!(bitmap, [start = 1, count = 2]);
     // assert_eq!(x, 0b110);
     ($bitmap: ident, [start = $start_pos: tt, count = $count: tt]) => {
         {
@@ -216,7 +216,7 @@ macro_rules! set_bmp {
     };
 
     // let mut bitmap = 0;
-    // set_bmp!(in bitmap, [start = 1, count = 2]);
+    // set!(in bitmap, [start = 1, count = 2]);
     // assert_eq!(bitmap, 0b110);
     (in $bitmap: ident, [start = $start_pos: tt, count = $count: tt]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -224,7 +224,7 @@ macro_rules! set_bmp {
     };
 
     // let bitmap: u8 = 0;
-    // let x = set_bmp!(bitmap, rev [1..3]);
+    // let x = set!(bitmap, rev [1..3]);
     // assert_eq!(x, 0b_0110_0000);
     ($bitmap: ident, rev [$start_pos: tt .. $end_pos: tt]) => {
         {
@@ -236,7 +236,7 @@ macro_rules! set_bmp {
     };
 
     // let mut bitmap: u8 = 0;
-    // set_bmp!(in bitmap, rev [1..3]);
+    // set!(in bitmap, rev [1..3]);
     // assert_eq!(bitmap, 0b_0110_0000);
     (in $bitmap: ident, rev [$start_pos: tt .. $end_pos: tt]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -246,7 +246,7 @@ macro_rules! set_bmp {
     };
 
     // let bitmap: u8 = 0;
-    // let x = set_bmp!(bitmap, rev [start = 1, count = 2]);
+    // let x = set!(bitmap, rev [start = 1, count = 2]);
     // assert_eq!(x, 0b_0110_0000);
     ($bitmap: ident, rev [start = $start_pos: tt, count = $count: tt]) => {
         {
@@ -257,7 +257,7 @@ macro_rules! set_bmp {
     };
 
     // let mut bitmap: u8 = 0;
-    // set_bmp!(in bitmap, rev [start = 1, count = 2]);
+    // set!(in bitmap, rev [start = 1, count = 2]);
     // assert_eq!(bitmap, 0b_0110_0000);
     (in $bitmap: ident, rev [start = $start_pos: tt, count = $count: tt]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -266,7 +266,7 @@ macro_rules! set_bmp {
     };
 
     // let bitmap: u8 = 0;
-    // let x = set_bmp!(bitmap, rev 2);
+    // let x = set!(bitmap, rev 2);
     // assert_eq!(x, 0b_0010_0000);
     ($bitmap: tt, rev $bit_pos: tt) => {
         {
@@ -277,7 +277,7 @@ macro_rules! set_bmp {
     };
 
     // let mut bitmap: u8 = 0;
-    // set_bmp!(in bitmap, rev 2);
+    // set!(in bitmap, rev 2);
     // assert_eq!(bitmap, 0b_0010_0000);
     (in $bitmap: ident, rev $bit_pos: tt) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -286,7 +286,7 @@ macro_rules! set_bmp {
     };
 
     // let bitmap = 0;
-    // let x = set_bmp!(bitmap, 2);
+    // let x = set!(bitmap, 2);
     // assert_eq!(x, 0b100);
     ($bitmap: tt, $bit_pos: tt) => {
         {
@@ -296,7 +296,7 @@ macro_rules! set_bmp {
     };
 
     // let mut bitmap = 0;
-    // set_bmp!(in bitmap, 2);
+    // set!(in bitmap, 2);
     // assert_eq!(bitmap, 0b100);
     (in $bitmap: ident, $bit_pos: tt) => {
         $crate::check_bitmap_impl!($bitmap);

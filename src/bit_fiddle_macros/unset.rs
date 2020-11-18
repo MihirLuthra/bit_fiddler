@@ -11,7 +11,7 @@
 /// ```
 /// # macro_rules! dont_test_but_have_syntax_highlighting { () => {
 /// let bitmap: u8 = 0b_1111_1111;
-/// let res = unset_bmp!(bitmap, ...);
+/// let res = unset!(bitmap, ...);
 /// assert_eq!(bitmap, 0b_1111_1111); // Stays same
 /// println!("{:#b}", res); // new bitmap with bits unset
 /// # }}
@@ -22,7 +22,7 @@
 /// ```
 /// # macro_rules! dont_test_but_have_syntax_highlighting { () => {
 /// // bits will be unset on 0b_0000_0101 and moved to res
-/// let res = unset_bmp!(0b_0000_0101, ...);
+/// let res = unset!(0b_0000_0101, ...);
 /// # }}
 /// ```
 ///
@@ -33,7 +33,7 @@
 /// ```
 /// # macro_rules! dont_test_but_have_syntax_highlighting { () => {
 /// let mut bitmap = 0b_1111_1111;
-/// unset_bmp!(in bitmap, ...);
+/// unset!(in bitmap, ...);
 /// // bits were unset in bitmap
 /// # }}
 /// ```
@@ -45,15 +45,15 @@
 /// For example,
 ///
 /// ```
-/// # use bit_fiddler::unset_bmp;
+/// # use bit_fiddler::unset;
 /// let mut bitmap: u8 = 0b_0010_0100;
 ///
 /// // Unsetting 2nd bit from rhs
-/// unset_bmp!(in bitmap, 2);
+/// unset!(in bitmap, 2);
 /// assert_eq!(bitmap, 0b_0010_0000);
 ///
 /// // Unsetting 2nd bit from lhs
-/// unset_bmp!(in bitmap, rev 2);
+/// unset!(in bitmap, rev 2);
 /// assert_eq!(bitmap, 0b_0000_0000);
 /// ```
 /// # Unsetting Bit Ranges
@@ -63,93 +63,93 @@
 ///
 /// # Examples
 /// ```
-/// use bit_fiddler::unset_bmp;
+/// use bit_fiddler::unset;
 ///
 /// // Unset third bit from the right and return the resulting bitmap.
 /// let bitmap = 0b100;
-/// let x = unset_bmp!(bitmap, 2);
+/// let x = unset!(bitmap, 2);
 /// assert_eq!(x, 0);
 ///
 /// // Unset third bit from the right in the passed bitmap itself.
 /// let mut bitmap = 0b100;
-/// unset_bmp!(in bitmap, 2);
+/// unset!(in bitmap, 2);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Unset third bit from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0b_0010_0000;
-/// let x = unset_bmp!(bitmap, rev 2);
+/// let x = unset!(bitmap, rev 2);
 /// assert_eq!(x, 0);
 ///
 /// // Unset third bit from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0b_0010_0000;
-/// unset_bmp!(in bitmap, rev 2);
+/// unset!(in bitmap, rev 2);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Unset second, third & fourth bit from the right and return the resulting bitmap.
 /// let bitmap = 0b1110;
-/// let x = unset_bmp!(bitmap, [1, 2, 3]);
+/// let x = unset!(bitmap, [1, 2, 3]);
 /// assert_eq!(x, 0);
 ///
 /// // Unset second, third & fourth bit from the right in the passed bitmap itself.
 /// let mut bitmap = 0b1110;
-/// unset_bmp!(in bitmap, [1, 2, 3]);
+/// unset!(in bitmap, [1, 2, 3]);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Unset second, third & fourth bit from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0b0111_0000;
-/// let x = unset_bmp!(bitmap, rev [1, 2, 3]);
+/// let x = unset!(bitmap, rev [1, 2, 3]);
 /// assert_eq!(x, 0);
 ///
 /// // Unset second, third & fourth bit from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0b0111_0000;
-/// unset_bmp!(in bitmap, rev [1, 2, 3]);
+/// unset!(in bitmap, rev [1, 2, 3]);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Unset second & third (1 and 2) bit from the right and return the resulting bitmap.
 /// let bitmap = 0b110;
-/// let x = unset_bmp!(bitmap, [1..3]);
+/// let x = unset!(bitmap, [1..3]);
 /// assert_eq!(x, 0);
 ///
 /// // Unset second & third bit (1 and 2) from the right in the passed bitmap itself.
 /// let mut bitmap = 0b110;
-/// unset_bmp!(in bitmap, [1..3]);
+/// unset!(in bitmap, [1..3]);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Starting from second bit, unset 2 bits from the right and return the resulting bitmap.
 /// let bitmap = 0b110;
-/// let x = unset_bmp!(bitmap, [start = 1, count = 2]);
+/// let x = unset!(bitmap, [start = 1, count = 2]);
 /// assert_eq!(x, 0);
 ///
 /// // Starting from second bit, unset 2 bits from the right in the passed bitmap itself.
 /// let mut bitmap = 0b110;
-/// unset_bmp!(in bitmap, [start = 1, count = 2]);
+/// unset!(in bitmap, [start = 1, count = 2]);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Unset second & third bit (1 and 2) from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0b_0110_0000;
-/// let x = unset_bmp!(bitmap, rev [1..3]);
+/// let x = unset!(bitmap, rev [1..3]);
 /// assert_eq!(x, 0);
 ///
 /// // Unset second & third bit (1 and 2) from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0b_0110_0000;
-/// unset_bmp!(in bitmap, rev [1..3]);
+/// unset!(in bitmap, rev [1..3]);
 /// assert_eq!(bitmap, 0);
 /// 
 /// // Starting from second bit, unset 2 bits from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0b_0110_0000;
-/// let x = unset_bmp!(bitmap, rev [start = 1, count = 2]);
+/// let x = unset!(bitmap, rev [start = 1, count = 2]);
 /// assert_eq!(x, 0);
 ///
 /// // Starting from second bit, unset 2 bits from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0b_0110_0000;
-/// unset_bmp!(in bitmap, rev [start = 1, count = 2]);
+/// unset!(in bitmap, rev [start = 1, count = 2]);
 /// assert_eq!(bitmap, 0);
 /// 
 /// ```
 #[macro_export]
-macro_rules! unset_bmp { 
+macro_rules! unset { 
     // let bitmap = 0b1110;
-    // let x = unset_bmp!(bitmap, [1, 2, 3]);
+    // let x = unset!(bitmap, [1, 2, 3]);
     // assert_eq!(x, 0);
     ($bitmap: tt, [$( $bit_pos: tt),*]) => {
         {
@@ -158,7 +158,7 @@ macro_rules! unset_bmp {
         }
     };
     // let mut bitmap = 0b1110;
-    // unset_bmp!(in bitmap, [1, 2, 3]);
+    // unset!(in bitmap, [1, 2, 3]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, [$( $bit_pos: tt),*]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -166,7 +166,7 @@ macro_rules! unset_bmp {
     };
 
     // let bitmap: u8 = 0b0111_0000;
-    // let x = unset_bmp!(bitmap, rev [1, 2, 3]);
+    // let x = unset!(bitmap, rev [1, 2, 3]);
     // assert_eq!(x, 0);
     ($bitmap: tt, rev [$( $bit_pos: tt),*]) => {
         {
@@ -176,7 +176,7 @@ macro_rules! unset_bmp {
         }
     };
     // let mut bitmap: u8 = 0b0111_0000;
-    // unset_bmp!(bitmap, rev [1, 2, 3]);
+    // unset!(bitmap, rev [1, 2, 3]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: tt, rev [$( $bit_pos: tt),*]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -185,7 +185,7 @@ macro_rules! unset_bmp {
     };
 
     // let bitmap = 0b110;
-    // let x = unset_bmp!(bitmap, [1..3]);
+    // let x = unset!(bitmap, [1..3]);
     // assert_eq!(x, 0);
     ($bitmap: ident, [$start_pos: tt .. $end_pos: tt]) => {
         {
@@ -196,7 +196,7 @@ macro_rules! unset_bmp {
     };
 
     // let mut bitmap = 0b110;
-    // unset_bmp!(in bitmap, [1..3]);
+    // unset!(in bitmap, [1..3]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, [$start_pos: tt .. $end_pos: tt]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -205,7 +205,7 @@ macro_rules! unset_bmp {
     };
 
     // let bitmap = 0b110;
-    // let x = unset_bmp!(bitmap, [start = 1, count = 2]);
+    // let x = unset!(bitmap, [start = 1, count = 2]);
     // assert_eq!(x, 0);
     ($bitmap: ident, [start = $start_pos: tt, count = $count: tt]) => {
         {
@@ -215,7 +215,7 @@ macro_rules! unset_bmp {
     };
 
     // let mut bitmap = 0b110;
-    // unset_bmp!(in bitmap, [start = 1, count = 2]);
+    // unset!(in bitmap, [start = 1, count = 2]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, [start = $start_pos: tt, count = $count: tt]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -223,7 +223,7 @@ macro_rules! unset_bmp {
     };
 
     // let bitmap: u8 = 0b_0110_0000;
-    // let x = unset_bmp!(bitmap, rev [1..3]);
+    // let x = unset!(bitmap, rev [1..3]);
     // assert_eq!(x, 0);
     ($bitmap: ident, rev [$start_pos: tt .. $end_pos: tt]) => {
         {
@@ -235,7 +235,7 @@ macro_rules! unset_bmp {
     };
 
     // let mut bitmap: u8 = 0b_0110_0000;
-    // unset_bmp!(in bitmap, rev [1..3]);
+    // unset!(in bitmap, rev [1..3]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, rev [$start_pos: tt .. $end_pos: tt]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -245,7 +245,7 @@ macro_rules! unset_bmp {
     };
 
     // let bitmap: u8 = 0b_0110_0000;
-    // let x = unset_bmp!(bitmap, rev [start = 1, count = 2]);
+    // let x = unset!(bitmap, rev [start = 1, count = 2]);
     // assert_eq!(x, 0);
     ($bitmap: ident, rev [start = $start_pos: tt, count = $count: tt]) => {
         {
@@ -256,7 +256,7 @@ macro_rules! unset_bmp {
     };
 
     // let mut bitmap: u8 = 0b_0110_0000;
-    // unset_bmp!(in bitmap, rev [start = 1, count = 2]);
+    // unset!(in bitmap, rev [start = 1, count = 2]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, rev [start = $start_pos: tt, count = $count: tt]) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -265,7 +265,7 @@ macro_rules! unset_bmp {
     };
 
     // let bitmap: u8 = 0b_0010_0000;
-    // let x = unset_bmp!(bitmap, rev 2);
+    // let x = unset!(bitmap, rev 2);
     // assert_eq!(x, 0);
     ($bitmap: tt, rev $bit_pos: tt) => {
         {
@@ -276,7 +276,7 @@ macro_rules! unset_bmp {
     };
 
     // let mut bitmap: u8 = 0b_0010_0000;
-    // unset_bmp!(in bitmap, rev 2);
+    // unset!(in bitmap, rev 2);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, rev $bit_pos: tt) => {
         $crate::check_bitmap_impl!($bitmap);
@@ -285,7 +285,7 @@ macro_rules! unset_bmp {
     };
 
     // let bitmap = 0b100;
-    // let x = unset_bmp!(bitmap, 2);
+    // let x = unset!(bitmap, 2);
     // assert_eq!(x, 0);
     ($bitmap: tt, $bit_pos: tt) => {
         {
@@ -295,7 +295,7 @@ macro_rules! unset_bmp {
     };
 
     // let mut bitmap = 0b100;
-    // unset_bmp!(in bitmap, 2);
+    // unset!(in bitmap, 2);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, $bit_pos: tt) => {
         $crate::check_bitmap_impl!($bitmap);
