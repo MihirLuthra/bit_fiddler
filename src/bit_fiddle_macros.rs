@@ -1,5 +1,3 @@
-use super::{check_bitmap_impl, bitmap_trait::{Bitmap}};
-
 /// Macro for setting single, multiple or range of bits.
 /// It accepts multiple patterns for different use cases.
 /// It doesn't do any overflow or underflow checks. Behaviour on passing
