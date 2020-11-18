@@ -1,8 +1,10 @@
-use std::ops::{
-    BitOrAssign, BitOr
-};
-
+/// Only types implementing Bitmap trait
+/// are accepted by bit_fiddler macros.
+///
+/// **TODO**: Make this trait publicly available for foreign
+/// types. Currently it's restricted to primitive integers.
 pub trait Bitmap: trait_seal::TraitSeal {
+    /// Number of bits in bitmap
     const BIT_COUNT: usize;
 }
 
@@ -14,9 +16,38 @@ macro_rules! impl_bitmap {
     };
 }
 
+/// To check if the type implements Bitmap trait.
+/// This function has no body and hence is optimisied away by the compiler
 pub fn check_bitmap_impl_by_type<T: Bitmap>() {}
-pub fn check_bitmap_impl_by_value<T: Bitmap>(arg: T) {}
 
+/// To check if the argument implements Bitmap trait.
+/// This function has no body and hence is optimisied away by the compiler
+pub fn check_bitmap_impl_by_value<T: Bitmap>(_arg: T) {}
+
+/// Checks if the type, identifier or a literal implement
+/// Bitmap trait or not.
+///
+/// # Examples
+/// ```
+/// # use bit_fiddler::check_bitmap_impl;
+/// check_bitmap_impl!(for type i32);
+/// ```
+///
+/// ```compile_fail
+/// # use bit_fiddler::check_bitmap_impl;
+/// check_bitmap_impl!(for type String);
+/// ```
+///
+/// ```
+/// # use bit_fiddler::check_bitmap_impl;
+/// check_bitmap_impl!(12); // i32 implements Bitmap trait
+/// ```
+///
+/// ```compile_fail
+/// # use bit_fiddler::check_bitmap_impl;
+/// check_bitmap_impl!("hello");
+/// ```
+///
 #[macro_export]
 macro_rules! check_bitmap_impl { 
     (for type $ty: ty) => {
