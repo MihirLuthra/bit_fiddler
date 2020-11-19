@@ -1,6 +1,7 @@
 /// This will change in subsequent versions for 
 /// supporting multiple patterns. Currently it's just a dependency
 /// of other macros. 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! mask {
     ([..$count: tt], bit_count = $bit_count: tt) => {
