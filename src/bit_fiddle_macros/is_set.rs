@@ -90,7 +90,7 @@ macro_rules! is_set {
     ($bitmap: tt, rev [$( $bit_pos: tt),*]) => {
         {
             $crate::check_bitmap_impl!($bitmap);
-            let total_bit_count = std::mem::size_of_val(& $bitmap ) * 8;
+            let total_bit_count = $crate::max_bits!($bitmap);
             let bits_to_check = ($( (1 << (total_bit_count - $bit_pos - 1)) | )* 0);
             ($bitmap & bits_to_check) == bits_to_check
         }
@@ -99,11 +99,13 @@ macro_rules! is_set {
     // let bitmap = 0b110;
     // let res = is_set!(bitmap, [1..3]);
     // assert_eq!(res, true);
-    ($bitmap: ident, [$start_pos: tt .. $end_pos: tt]) => {
+    ($bitmap: tt, [$start_pos: tt .. $end_pos: tt]) => {
         {
             $crate::check_bitmap_impl!($bitmap);
             let count_to_set = $end_pos - $start_pos;
-            let bits_to_check = (((1 << count_to_set) - 1) << $start_pos);
+            let total_bit_count = $crate::max_bits!($bitmap);
+            let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
+            let bits_to_check = (mask << $start_pos);
             ($bitmap & bits_to_check) == bits_to_check
         }
     };
@@ -111,10 +113,12 @@ macro_rules! is_set {
     // let bitmap = 0b110;
     // let res = is_set!(bitmap, [start = 1, count = 2]);
     // assert_eq!(res, true);
-    ($bitmap: ident, [start = $start_pos: tt, count = $count: tt]) => {
+    ($bitmap: tt, [start = $start_pos: tt, count = $count: tt]) => {
         {
             $crate::check_bitmap_impl!($bitmap);
-            let bits_to_check = (((1 << $count) - 1) << $start_pos);
+            let total_bit_count = $crate::max_bits!($bitmap);
+            let mask = $crate::mask!([..$count], bit_count = total_bit_count);
+            let bits_to_check = (mask << $start_pos);
             ($bitmap & bits_to_check) == bits_to_check
         }
     };
@@ -122,13 +126,14 @@ macro_rules! is_set {
     // let bitmap: u8 = 0b_0110_0000;
     // let res = is_set!(bitmap, rev [1..3]);
     // assert_eq!(res, true);
-    ($bitmap: ident, rev [$start_pos: tt .. $end_pos: tt]) => {
+    ($bitmap: tt, rev [$start_pos: tt .. $end_pos: tt]) => {
         {
             $crate::check_bitmap_impl!($bitmap);
-            let total_bit_count = std::mem::size_of_val(& $bitmap ) * 8;
             let count_to_set = $end_pos - $start_pos;
+            let total_bit_count = $crate::max_bits!($bitmap);
+            let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
             let bits_to_check 
-                = (((1 << count_to_set) - 1) << (total_bit_count - $start_pos - 1 - (count_to_set - 1)));
+                = (mask << (total_bit_count - $start_pos - 1 - (count_to_set - 1)));
             ($bitmap & bits_to_check) == bits_to_check
         }
     };
@@ -136,12 +141,13 @@ macro_rules! is_set {
     // let bitmap: u8 = 0b_0110_0000;
     // let res = is_set!(bitmap, rev [start = 1, count = 2]);
     // assert_eq!(res, true);
-    ($bitmap: ident, rev [start = $start_pos: tt, count = $count: tt]) => {
+    ($bitmap: tt, rev [start = $start_pos: tt, count = $count: tt]) => {
         {
             $crate::check_bitmap_impl!($bitmap);
-            let total_bit_count = std::mem::size_of_val(& $bitmap ) * 8;
+            let total_bit_count = $crate::max_bits!($bitmap);
+            let mask = $crate::mask!([..$count], bit_count = total_bit_count);
             let bits_to_check
-                = (((1 << $count) - 1) << (total_bit_count - $start_pos - 1 - ($count - 1)));
+                = (mask << (total_bit_count - $start_pos - 1 - ($count - 1)));
             ($bitmap & bits_to_check) == bits_to_check
         }
     };
@@ -152,7 +158,7 @@ macro_rules! is_set {
     ($bitmap: tt, rev $bit_pos: tt) => {
         {
             $crate::check_bitmap_impl!($bitmap);
-            let total_bit_count = std::mem::size_of_val(& $bitmap ) * 8;
+            let total_bit_count = $crate::max_bits!($bitmap);
             ( $bitmap & (1 << (total_bit_count - $bit_pos - 1)) )
                 != 0
         }
