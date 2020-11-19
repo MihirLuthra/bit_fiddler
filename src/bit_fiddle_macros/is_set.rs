@@ -78,7 +78,6 @@ macro_rules! is_set {
     // assert_eq!(res, true);
     ($bitmap: tt, [$( $bit_pos: tt),*]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let bits_to_check = ($( (1 << $bit_pos) | )* 0);
             ($bitmap & bits_to_check) == bits_to_check
         }
@@ -89,7 +88,6 @@ macro_rules! is_set {
     // assert_eq!(res, true);
     ($bitmap: tt, rev [$( $bit_pos: tt),*]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let total_bit_count = $crate::max_bits!($bitmap);
             let bits_to_check = ($( (1 << (total_bit_count - $bit_pos - 1)) | )* 0);
             ($bitmap & bits_to_check) == bits_to_check
@@ -101,7 +99,6 @@ macro_rules! is_set {
     // assert_eq!(res, true);
     ($bitmap: tt, [$start_pos: tt .. $end_pos: tt]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let count_to_set = $end_pos - $start_pos;
             let total_bit_count = $crate::max_bits!($bitmap);
             let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
@@ -115,7 +112,6 @@ macro_rules! is_set {
     // assert_eq!(res, true);
     ($bitmap: tt, [start = $start_pos: tt, count = $count: tt]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let total_bit_count = $crate::max_bits!($bitmap);
             let mask = $crate::mask!([..$count], bit_count = total_bit_count);
             let bits_to_check = (mask << $start_pos);
@@ -128,7 +124,6 @@ macro_rules! is_set {
     // assert_eq!(res, true);
     ($bitmap: tt, rev [$start_pos: tt .. $end_pos: tt]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let count_to_set = $end_pos - $start_pos;
             let total_bit_count = $crate::max_bits!($bitmap);
             let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
@@ -143,7 +138,6 @@ macro_rules! is_set {
     // assert_eq!(res, true);
     ($bitmap: tt, rev [start = $start_pos: tt, count = $count: tt]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let total_bit_count = $crate::max_bits!($bitmap);
             let mask = $crate::mask!([..$count], bit_count = total_bit_count);
             let bits_to_check
@@ -157,7 +151,6 @@ macro_rules! is_set {
     // assert_eq!(res, true);
     ($bitmap: tt, rev $bit_pos: tt) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let total_bit_count = $crate::max_bits!($bitmap);
             ( $bitmap & (1 << (total_bit_count - $bit_pos - 1)) )
                 != 0
@@ -169,7 +162,6 @@ macro_rules! is_set {
     // assert_eq!(res, true);
     ($bitmap: tt, $bit_pos: tt) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             ( $bitmap & (1 << $bit_pos) )
                 != 0
         }

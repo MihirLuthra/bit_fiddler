@@ -153,7 +153,6 @@ macro_rules! toggle {
     // assert_eq!(x, 0);
     ($bitmap: tt, [$( $bit_pos: tt),*]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             $bitmap ^ ($( (1 << $bit_pos) | )* 0)
         }
     };
@@ -161,7 +160,6 @@ macro_rules! toggle {
     // toggle!(in bitmap, [1, 2, 3]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, [$( $bit_pos: tt),*]) => {
-        $crate::check_bitmap_impl!($bitmap);
         $bitmap ^= $( (1 << $bit_pos) | )* 0;
     };
 
@@ -170,7 +168,6 @@ macro_rules! toggle {
     // assert_eq!(x, 0);
     ($bitmap: tt, rev [$( $bit_pos: tt),*]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let total_bit_count = $crate::max_bits!($bitmap);
             $bitmap ^ ($( (1 << (total_bit_count - $bit_pos - 1)) | )* 0)
         }
@@ -179,7 +176,6 @@ macro_rules! toggle {
     // toggle!(bitmap, rev [1, 2, 3]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, rev [$( $bit_pos: tt),*]) => {
-        $crate::check_bitmap_impl!($bitmap);
         let total_bit_count = $crate::max_bits!($bitmap);
         $bitmap ^= $( (1 << (total_bit_count - $bit_pos - 1)) | )* 0;
     };
@@ -189,7 +185,6 @@ macro_rules! toggle {
     // assert_eq!(x, 0);
     ($bitmap: tt, [$start_pos: tt .. $end_pos: tt]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let count_to_set = $end_pos - $start_pos;
             let total_bit_count = $crate::max_bits!($bitmap);
             let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
@@ -201,7 +196,6 @@ macro_rules! toggle {
     // toggle!(in bitmap, [1..3]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, [$start_pos: tt .. $end_pos: tt]) => {
-        $crate::check_bitmap_impl!($bitmap);
         let count_to_set = $end_pos - $start_pos;
         let total_bit_count = $crate::max_bits!($bitmap);
         let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
@@ -213,7 +207,6 @@ macro_rules! toggle {
     // assert_eq!(x, 0);
     ($bitmap: tt, [start = $start_pos: tt, count = $count: tt]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let total_bit_count = $crate::max_bits!($bitmap);
             let mask = $crate::mask!([..$count], bit_count = total_bit_count);
             $bitmap ^ (mask << $start_pos)
@@ -224,7 +217,6 @@ macro_rules! toggle {
     // toggle!(in bitmap, [start = 1, count = 2]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, [start = $start_pos: tt, count = $count: tt]) => {
-        $crate::check_bitmap_impl!($bitmap);
         let total_bit_count = $crate::max_bits!($bitmap);
         let mask = $crate::mask!([..$count], bit_count = total_bit_count);
         $bitmap ^= mask << $start_pos;
@@ -235,7 +227,6 @@ macro_rules! toggle {
     // assert_eq!(x, 0);
     ($bitmap: tt, rev [$start_pos: tt .. $end_pos: tt]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let total_bit_count = $crate::max_bits!($bitmap);
             let count_to_set = $end_pos - $start_pos;
             let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
@@ -247,7 +238,6 @@ macro_rules! toggle {
     // toggle!(in bitmap, rev [1..3]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, rev [$start_pos: tt .. $end_pos: tt]) => {
-        $crate::check_bitmap_impl!($bitmap);
         let total_bit_count = $crate::max_bits!($bitmap);
         let count_to_set = $end_pos - $start_pos;
         let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
@@ -259,7 +249,6 @@ macro_rules! toggle {
     // assert_eq!(x, 0);
     ($bitmap: tt, rev [start = $start_pos: tt, count = $count: tt]) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let total_bit_count = $crate::max_bits!($bitmap);
             let mask = $crate::mask!([..$count], bit_count = total_bit_count);
             $bitmap ^ (mask << (total_bit_count - $start_pos - 1 - ($count - 1)))
@@ -270,7 +259,6 @@ macro_rules! toggle {
     // toggle!(in bitmap, rev [start = 1, count = 2]);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, rev [start = $start_pos: tt, count = $count: tt]) => {
-        $crate::check_bitmap_impl!($bitmap);
         let total_bit_count = $crate::max_bits!($bitmap);
         let mask = $crate::mask!([..$count], bit_count = total_bit_count);
         $bitmap ^= mask << (total_bit_count - $start_pos - 1 - ($count - 1));
@@ -281,7 +269,6 @@ macro_rules! toggle {
     // assert_eq!(x, 0);
     ($bitmap: tt, rev $bit_pos: tt) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             let total_bit_count = $crate::max_bits!($bitmap);
             $bitmap ^ (1 << (total_bit_count - $bit_pos - 1))
         }
@@ -291,7 +278,6 @@ macro_rules! toggle {
     // toggle!(in bitmap, rev 2);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, rev $bit_pos: tt) => {
-        $crate::check_bitmap_impl!($bitmap);
         let total_bit_count = $crate::max_bits!($bitmap);
         $bitmap ^= 1 << (total_bit_count - $bit_pos - 1);
     };
@@ -301,7 +287,6 @@ macro_rules! toggle {
     // assert_eq!(x, 0);
     ($bitmap: tt, $bit_pos: tt) => {
         {
-            $crate::check_bitmap_impl!($bitmap);
             $bitmap ^ (1 << $bit_pos)
         }
     };
@@ -310,7 +295,6 @@ macro_rules! toggle {
     // toggle!(in bitmap, 2);
     // assert_eq!(bitmap, 0);
     (in $bitmap: ident, $bit_pos: tt) => {
-        $crate::check_bitmap_impl!($bitmap);
         $bitmap ^= 1 << $bit_pos;
     };
 }
