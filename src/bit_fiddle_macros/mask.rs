@@ -1,16 +1,27 @@
+/// This will change in subsequent versions for 
+/// supporting multiple patterns. Currently it's just a dependency
+/// of other macros. 
 #[macro_export]
 macro_rules! mask {
     ([..$count: tt], bit_count = $bit_count: tt) => {
         {
-            let dec_bit_count = $bit_count - 1;
-            [(1 << ($count & dec_bit_count)) - 1, !0][((($count & !dec_bit_count)) != 0) as usize]
+            $crate::mask!([0..$count], bit_count = $bit_count)
         }
-    };/*
-    ($bitmap: tt, [..$count: tt]) => {
+    };
+    ([$start: tt..], bit_count = $bit_count: tt) => {
         {
-            let bit_count = std::mem::size_of_val(& $bitmap) * 8;
-            let dec_bit_count = bit_count - 1;
-            $bitmap & [(1 << ($count & dec_bit_count)) - 1, !1][((($count & !dec_bit_count)) != 0) as usize]
+            !0 << $start
         }
-    };*/
+    };
+    ([..], bit_count = $bit_count: tt) => {
+        {
+            !0
+        }
+    };
+    ([$start: tt..$end: tt], bit_count = $bit_count: tt) => {
+        {
+            let dec_bit_count = $bit_count - 1;
+            [(1 << ($end & dec_bit_count)) - 1, !0][((($end & !dec_bit_count)) != 0) as usize] << $start
+        }
+    };
 }
