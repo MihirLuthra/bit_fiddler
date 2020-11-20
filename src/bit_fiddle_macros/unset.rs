@@ -11,7 +11,7 @@
 /// ```
 /// # macro_rules! dont_test_but_have_syntax_highlighting { () => {
 /// let bitmap: u8 = 0b_1111_1111;
-/// let res = unset!(bitmap, ...);
+/// let res = unset!(bitmap, u8, ...);
 /// assert_eq!(bitmap, 0b_1111_1111); // Stays same
 /// println!("{:#b}", res); // new bitmap with bits unset
 /// # }}
@@ -33,7 +33,7 @@
 /// ```
 /// # macro_rules! dont_test_but_have_syntax_highlighting { () => {
 /// let mut bitmap = 0b_1111_1111;
-/// unset!(in bitmap, ...);
+/// unset!(in bitmap, u8, ...);
 /// // bits were unset in bitmap
 /// # }}
 /// ```
@@ -49,11 +49,11 @@
 /// let mut bitmap: u8 = 0b_0010_0100;
 ///
 /// // Unsetting 2nd bit from rhs
-/// unset!(in bitmap, 2);
+/// unset!(in bitmap, u8, 2);
 /// assert_eq!(bitmap, 0b_0010_0000);
 ///
 /// // Unsetting 2nd bit from lhs
-/// unset!(in bitmap, rev 2);
+/// unset!(in bitmap, u8, rev 2);
 /// assert_eq!(bitmap, 0b_0000_0000);
 /// ```
 /// # Unsetting Bit Ranges
@@ -67,230 +67,173 @@
 ///
 /// // Unset third bit from the right and return the resulting bitmap.
 /// let bitmap = 0b100;
-/// let x = unset!(bitmap, 2);
+/// let x = unset!(bitmap, u8, 2);
 /// assert_eq!(x, 0);
 ///
 /// // Unset third bit from the right in the passed bitmap itself.
 /// let mut bitmap = 0b100;
-/// unset!(in bitmap, 2);
+/// unset!(in bitmap, u8, 2);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Unset third bit from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0b_0010_0000;
-/// let x = unset!(bitmap, rev 2);
+/// let x = unset!(bitmap, u8, rev 2);
 /// assert_eq!(x, 0);
 ///
 /// // Unset third bit from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0b_0010_0000;
-/// unset!(in bitmap, rev 2);
+/// unset!(in bitmap, u8, rev 2);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Unset second, third & fourth bit from the right and return the resulting bitmap.
 /// let bitmap = 0b1110;
-/// let x = unset!(bitmap, [1, 2, 3]);
+/// let x = unset!(bitmap, u8, [1, 2, 3]);
 /// assert_eq!(x, 0);
 ///
 /// // Unset second, third & fourth bit from the right in the passed bitmap itself.
 /// let mut bitmap = 0b1110;
-/// unset!(in bitmap, [1, 2, 3]);
+/// unset!(in bitmap, u8, [1, 2, 3]);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Unset second, third & fourth bit from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0b0111_0000;
-/// let x = unset!(bitmap, rev [1, 2, 3]);
+/// let x = unset!(bitmap, u8, rev [1, 2, 3]);
 /// assert_eq!(x, 0);
 ///
 /// // Unset second, third & fourth bit from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0b0111_0000;
-/// unset!(in bitmap, rev [1, 2, 3]);
+/// unset!(in bitmap, u8, rev [1, 2, 3]);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Unset second & third (1 and 2) bit from the right and return the resulting bitmap.
 /// let bitmap = 0b110;
-/// let x = unset!(bitmap, [1..3]);
+/// let x = unset!(bitmap, u8, [1..3]);
 /// assert_eq!(x, 0);
 ///
 /// // Unset second & third bit (1 and 2) from the right in the passed bitmap itself.
 /// let mut bitmap = 0b110;
-/// unset!(in bitmap, [1..3]);
+/// unset!(in bitmap, u8, [1..3]);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Starting from second bit, unset 2 bits from the right and return the resulting bitmap.
 /// let bitmap = 0b110;
-/// let x = unset!(bitmap, [start = 1, count = 2]);
+/// let x = unset!(bitmap, u8, [start = 1, count = 2]);
 /// assert_eq!(x, 0);
 ///
 /// // Starting from second bit, unset 2 bits from the right in the passed bitmap itself.
 /// let mut bitmap = 0b110;
-/// unset!(in bitmap, [start = 1, count = 2]);
+/// unset!(in bitmap, u8, [start = 1, count = 2]);
 /// assert_eq!(bitmap, 0);
 ///
 /// // Unset second & third bit (1 and 2) from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0b_0110_0000;
-/// let x = unset!(bitmap, rev [1..3]);
+/// let x = unset!(bitmap, u8, rev [1..3]);
 /// assert_eq!(x, 0);
 ///
 /// // Unset second & third bit (1 and 2) from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0b_0110_0000;
-/// unset!(in bitmap, rev [1..3]);
+/// unset!(in bitmap, u8, rev [1..3]);
 /// assert_eq!(bitmap, 0);
-/// 
+///
 /// // Starting from second bit, unset 2 bits from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0b_0110_0000;
-/// let x = unset!(bitmap, rev [start = 1, count = 2]);
+/// let x = unset!(bitmap, u8, rev [start = 1, count = 2]);
 /// assert_eq!(x, 0);
 ///
 /// // Starting from second bit, unset 2 bits from the left in the passed bitmap itself.
 /// let mut bitmap: u8 = 0b_0110_0000;
-/// unset!(in bitmap, rev [start = 1, count = 2]);
+/// unset!(in bitmap, u8, rev [start = 1, count = 2]);
 /// assert_eq!(bitmap, 0);
-/// 
+///
 /// ```
 #[macro_export]
 macro_rules! unset { 
-    // let bitmap = 0b1110;
-    // let x = unset!(bitmap, [1, 2, 3]);
-    // assert_eq!(x, 0);
-    ($bitmap: tt, [$( $bit_pos: tt),*]) => {
+    ($bitmap: tt, $ty: ty, [$( $bit_pos: tt),*]) => {
         {
-            $bitmap & !($( (1 << $bit_pos) | )* 0)
-        }
-    };
-    // let mut bitmap = 0b1110;
-    // unset!(in bitmap, [1, 2, 3]);
-    // assert_eq!(bitmap, 0);
-    (in $bitmap: ident, [$( $bit_pos: tt),*]) => {
-        $bitmap &= !($( (1 << $bit_pos) | )* 0);
-    };
-
-    // let bitmap: u8 = 0b0111_0000;
-    // let x = unset!(bitmap, rev [1, 2, 3]);
-    // assert_eq!(x, 0);
-    ($bitmap: tt, rev [$( $bit_pos: tt),*]) => {
-        {
-            $bitmap & !($( (1 << ($crate::max_bits!($bitmap) - $bit_pos - 1)) | )* 0)
-        }
-    };
-    // let mut bitmap: u8 = 0b0111_0000;
-    // unset!(bitmap, rev [1, 2, 3]);
-    // assert_eq!(bitmap, 0);
-    (in $bitmap: ident, rev [$( $bit_pos: tt),*]) => {
-        $bitmap &= !($( (1 << ($crate::max_bits!($bitmap) - $bit_pos - 1)) | )* 0);
-    };
-
-    // let bitmap = 0b110;
-    // let x = unset!(bitmap, [1..3]);
-    // assert_eq!(x, 0);
-    ($bitmap: tt, [$start_pos: tt .. $end_pos: tt]) => {
-        {
-            let count_to_set = $end_pos - $start_pos;
-            let total_bit_count = $crate::max_bits!($bitmap);
-            let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
-            $bitmap & !(mask << $start_pos)
+            ($bitmap as $ty) & !($( ((1 as $ty) << $bit_pos) | )* (0 as $ty))
         }
     };
 
-    // let mut bitmap = 0b110;
-    // unset!(in bitmap, [1..3]);
-    // assert_eq!(bitmap, 0);
-    (in $bitmap: ident, [$start_pos: tt .. $end_pos: tt]) => {
-        let count_to_set = $end_pos - $start_pos;
-        let total_bit_count = $crate::max_bits!($bitmap);
-        let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
-        $bitmap &= !(mask << $start_pos);
+    (in $bitmap: ident, $ty: ty, [$( $bit_pos: tt),*]) => {
+        $bitmap &= !($( ((1 as $ty) << $bit_pos) | )* (0 as $ty));
     };
 
-    // let bitmap = 0b110;
-    // let x = unset!(bitmap, [start = 1, count = 2]);
-    // assert_eq!(x, 0);
-    ($bitmap: tt, [start = $start_pos: tt, count = $count: tt]) => {
+    ($bitmap: tt, $ty: ty, rev [$( $bit_pos: tt),*]) => {
         {
-            let total_bit_count = $crate::max_bits!($bitmap);
-            let mask = $crate::mask!([..$count], bit_count = total_bit_count);
-            $bitmap & !(mask << $start_pos)
+            ($bitmap as $ty) 
+                & !($( ((1 as $ty) << ($crate::max_bits!(type = ($ty)) - $bit_pos - 1)) | )* (0 as $ty))
         }
     };
 
-    // let mut bitmap = 0b110;
-    // unset!(in bitmap, [start = 1, count = 2]);
-    // assert_eq!(bitmap, 0);
-    (in $bitmap: ident, [start = $start_pos: tt, count = $count: tt]) => {
-        let total_bit_count = $crate::max_bits!($bitmap);
-        let mask = $crate::mask!([..$count], bit_count = total_bit_count);
-        $bitmap &= !(mask << $start_pos);
+    (in $bitmap: ident, $ty: ty, rev [$( $bit_pos: tt),*]) => {
+        $bitmap &= !($( ((1 as $ty) << ($crate::max_bits!(type = ($ty)) - $bit_pos - 1)) | )* (0 as $ty));
     };
 
-    // let bitmap: u8 = 0b_0110_0000;
-    // let x = unset!(bitmap, rev [1..3]);
-    // assert_eq!(x, 0);
-    ($bitmap: tt, rev [$start_pos: tt .. $end_pos: tt]) => {
+    ($bitmap: tt, $ty: ty, [$start_pos: tt .. $end_pos: tt]) => {
         {
-            let count_to_set = $end_pos - $start_pos;
-            let total_bit_count = $crate::max_bits!($bitmap);
-            let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
-            $bitmap & !(mask << (total_bit_count - $start_pos - 1 - (count_to_set - 1)))
+            let mask = $crate::mask!([($start_pos)..($end_pos)], ($ty));
+            $bitmap & !mask
         }
     };
 
-    // let mut bitmap: u8 = 0b_0110_0000;
-    // unset!(in bitmap, rev [1..3]);
-    // assert_eq!(bitmap, 0);
-    (in $bitmap: ident, rev [$start_pos: tt .. $end_pos: tt]) => {
-        let count_to_set = $end_pos - $start_pos;
-        let total_bit_count = $crate::max_bits!($bitmap);
-        let mask = $crate::mask!([..count_to_set], bit_count = total_bit_count);
-        $bitmap &= !(mask << (total_bit_count - $start_pos - 1 - (count_to_set - 1)));
+    (in $bitmap: ident, $ty: ty, [$start_pos: tt .. $end_pos: tt]) => {
+        let mask = $crate::mask!([($start_pos)..($end_pos)], ($ty));
+        $bitmap &= !mask;
     };
 
-    // let bitmap: u8 = 0b_0110_0000;
-    // let x = unset!(bitmap, rev [start = 1, count = 2]);
-    // assert_eq!(x, 0);
-    ($bitmap: tt, rev [start = $start_pos: tt, count = $count: tt]) => {
+    ($bitmap: tt, $ty: ty, [start = $start_pos: tt, count = $count: tt]) => {
         {
-            let total_bit_count = $crate::max_bits!($bitmap);
-            let mask = $crate::mask!([..$count], bit_count = total_bit_count);
-            $bitmap & !(mask << (total_bit_count - $start_pos - 1 - ($count - 1)))
+            let mask = $crate::mask!([start = ($start_pos), count = ($count)], ($ty));
+            $bitmap & !mask
         }
     };
 
-    // let mut bitmap: u8 = 0b_0110_0000;
-    // unset!(in bitmap, rev [start = 1, count = 2]);
-    // assert_eq!(bitmap, 0);
-    (in $bitmap: ident, rev [start = $start_pos: tt, count = $count: tt]) => {
-        let total_bit_count = $crate::max_bits!($bitmap);
-        let mask = $crate::mask!([..$count], bit_count = total_bit_count);
-        $bitmap &= !(mask << (total_bit_count - $start_pos - 1 - ($count - 1)));
+    (in $bitmap: ident, $ty: ty, [start = $start_pos: tt, count = $count: tt]) => {
+        let mask = $crate::mask!([start = ($start_pos), count = ($count)], $ty);
+        $bitmap &= !mask;
     };
 
-    // let bitmap: u8 = 0b_0010_0000;
-    // let x = unset!(bitmap, rev 2);
-    // assert_eq!(x, 0);
-    ($bitmap: tt, rev $bit_pos: tt) => {
+    ($bitmap: tt, $ty: ty, rev [$start_pos: tt .. $end_pos: tt]) => {
         {
-            $bitmap & !(1 << ($crate::max_bits!($bitmap) - $bit_pos - 1))
+            let mask = $crate::mask!(rev [($start_pos)..($end_pos)], ($ty));
+            $bitmap & !mask
         }
     };
 
-    // let mut bitmap: u8 = 0b_0010_0000;
-    // unset!(in bitmap, rev 2);
-    // assert_eq!(bitmap, 0);
-    (in $bitmap: ident, rev $bit_pos: tt) => {
-        $bitmap &= !(1 << ($crate::max_bits!($bitmap) - $bit_pos - 1));
+    (in $bitmap: ident, $ty: ty, rev [$start_pos: tt .. $end_pos: tt]) => {
+        let mask = $crate::mask!(rev [($start_pos)..($end_pos)], ($ty));
+        $bitmap &= !mask;
     };
 
-    // let bitmap = 0b100;
-    // let x = unset!(bitmap, 2);
-    // assert_eq!(x, 0);
-    ($bitmap: tt, $bit_pos: tt) => {
+    ($bitmap: tt, $ty: ty, rev [start = $start_pos: tt, count = $count: tt]) => {
         {
-            $bitmap & !(1 << $bit_pos)
+            let mask = $crate::mask!(rev [start = ($start_pos), count = ($count)], ($ty));
+            $bitmap & !mask
         }
     };
 
-    // let mut bitmap = 0b100;
-    // unset!(in bitmap, 2);
-    // assert_eq!(bitmap, 0);
-    (in $bitmap: ident, $bit_pos: tt) => {
-        $bitmap &= !(1 << $bit_pos);
+    (in $bitmap: ident, $ty: ty, rev [start = $start_pos: tt, count = $count: tt]) => {
+        let mask = $crate::mask!(rev [start = ($start_pos), count = ($count)], ($ty));
+        $bitmap &= !mask;
     };
-}
+
+    ($bitmap: tt, $ty: ty, rev $bit_pos: tt) => {
+        {
+            ($bitmap as $ty) & !((1 as $ty) << ($crate::max_bits!(type = ($ty)) - $bit_pos - 1))
+        }
+    };
+
+    (in $bitmap: ident, $ty: ty, rev $bit_pos: tt) => {
+        $bitmap &= !((1 as $ty) << ($crate::max_bits!(type = ($ty)) - $bit_pos - 1));
+    };
+
+    ($bitmap: tt, $ty: ty, $bit_pos: tt) => {
+        {
+            ($bitmap as $ty) & !((1 as $ty) << $bit_pos)
+        }
+    };
+
+    (in $bitmap: ident, $ty: ty, $bit_pos: tt) => {
+        $bitmap &= !((1 as $ty) << $bit_pos);
+    };
+} 
