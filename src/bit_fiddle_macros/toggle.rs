@@ -134,7 +134,7 @@
 /// let mut bitmap: u8 = 0b_0110_0000;
 /// toggle!(in bitmap, u8, rev [1..3]);
 /// assert_eq!(bitmap, 0);
-/// 
+///
 /// // Starting from second bit, toggle 2 bits from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0b_0110_0000;
 /// let x = toggle!(bitmap, u8, rev [start = 1, count = 2]);
@@ -144,10 +144,10 @@
 /// let mut bitmap: u8 = 0b_0110_0000;
 /// toggle!(in bitmap, u8, rev [start = 1, count = 2]);
 /// assert_eq!(bitmap, 0);
-/// 
+///
 /// ```
 #[macro_export]
-macro_rules! toggle { 
+macro_rules! toggle {
     ($bitmap: tt, $ty: ty, [$( $bit_pos: tt),*]) => {
         {
             ($bitmap as $ty) ^ ($( ((1 as $ty) << $bit_pos) | )* (0 as $ty))
@@ -160,7 +160,7 @@ macro_rules! toggle {
 
     ($bitmap: tt, $ty: ty, rev [$( $bit_pos: tt),*]) => {
         {
-            ($bitmap as $ty) 
+            ($bitmap as $ty)
                 ^ ($( ((1 as $ty) << ($crate::max_bits!(type = ($ty)) - $bit_pos - 1)) | )* (0 as $ty))
         }
     };
@@ -236,4 +236,4 @@ macro_rules! toggle {
     (in $bitmap: ident, $ty: ty, $bit_pos: tt) => {
         $bitmap ^= (1 as $ty) << $bit_pos;
     };
-} 
+}

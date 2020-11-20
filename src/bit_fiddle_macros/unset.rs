@@ -147,7 +147,7 @@
 ///
 /// ```
 #[macro_export]
-macro_rules! unset { 
+macro_rules! unset {
     ($bitmap: tt, $ty: ty, [$( $bit_pos: tt),*]) => {
         {
             ($bitmap as $ty) & !($( ((1 as $ty) << $bit_pos) | )* (0 as $ty))
@@ -160,7 +160,7 @@ macro_rules! unset {
 
     ($bitmap: tt, $ty: ty, rev [$( $bit_pos: tt),*]) => {
         {
-            ($bitmap as $ty) 
+            ($bitmap as $ty)
                 & !($( ((1 as $ty) << ($crate::max_bits!(type = ($ty)) - $bit_pos - 1)) | )* (0 as $ty))
         }
     };
@@ -236,4 +236,4 @@ macro_rules! unset {
     (in $bitmap: ident, $ty: ty, $bit_pos: tt) => {
         $bitmap &= !((1 as $ty) << $bit_pos);
     };
-} 
+}

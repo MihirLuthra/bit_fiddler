@@ -72,7 +72,7 @@
 /// assert_eq!(res, true);
 /// ```
 #[macro_export]
-macro_rules! is_set { 
+macro_rules! is_set {
     ($bitmap: tt, $ty: ty, [$( $bit_pos: tt),*]) => {
         {
             let bits_to_check = ($( ((1 as $ty) << $bit_pos) | )* (0 as $ty));

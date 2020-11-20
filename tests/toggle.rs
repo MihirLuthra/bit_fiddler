@@ -3,7 +3,7 @@ use bit_fiddler::toggle;
 #[test]
 fn toggle_single_bit() {
     let mut bitmap: u8 = 0b_1000_0001;
-    
+
     let res = toggle!(bitmap, u8, 7);
     assert_eq!(res, 0b1);
     assert_eq!(bitmap, 0b_1000_0001);
@@ -15,7 +15,7 @@ fn toggle_single_bit() {
 #[test]
 fn toggle_single_bit_rev() {
     let mut bitmap: u8 = 0b_1000_0001;
-    
+
     let res = toggle!(bitmap, u8, rev 7);
     assert_eq!(res, 0b_1000_0000);
     assert_eq!(bitmap, 0b_1000_0001);
@@ -59,7 +59,7 @@ fn toggle_range() {
     assert_eq!(bitmap, 0b_1111_1111);
 
     bitmap = 0b_1111_1111;
-    
+
     toggle!(in bitmap, u8, [2..6]);
     assert_eq!(bitmap, 0b_1100_0011);
 }
@@ -68,12 +68,12 @@ fn toggle_range() {
 fn toggle_range_rev() {
     let mut bitmap: u8 = 0b_0111_1111;
 
-    let res = toggle!(bitmap, u8, rev [1..8]);
+    let res = toggle!(bitmap, u8, rev[1..8]);
     assert_eq!(res, 0);
     assert_eq!(bitmap, 0b_0111_1111);
 
     bitmap = 0b_1000_0000;
-    
+
     toggle!(in bitmap, u8, rev [0..1]);
     assert_eq!(bitmap, 0);
 }
@@ -87,7 +87,7 @@ fn toggle_counted_range() {
     assert_eq!(bitmap, 0b_1000_0000);
 
     bitmap = 0b_0110_0000;
-    
+
     toggle!(in bitmap, u8, [start = 5, count = 2]);
     assert_eq!(bitmap, 0);
 }
@@ -99,7 +99,7 @@ fn toggle_counted_range_rev() {
     let res = toggle!(bitmap, u8, rev [start = 1, count = 2]);
     assert_eq!(res, 0);
     assert_eq!(bitmap, 0b_0110_0000);
-    
+
     bitmap = 0b_0111_1100;
 
     toggle!(in bitmap, u8, rev [start = 1, count = 5]);

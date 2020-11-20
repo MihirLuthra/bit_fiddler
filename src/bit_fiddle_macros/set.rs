@@ -135,7 +135,7 @@
 /// let mut bitmap: u8 = 0;
 /// set!(in bitmap, u8, rev [1..3]);
 /// assert_eq!(bitmap, 0b_0110_0000);
-/// 
+///
 /// // Starting from second bit, set 2 bits from the left and return the resulting bitmap.
 /// let bitmap: u8 = 0;
 /// let x = set!(bitmap, u8, rev [start = 1, count = 2]);
@@ -145,10 +145,10 @@
 /// let mut bitmap: u8 = 0;
 /// set!(in bitmap, u8, rev [start = 1, count = 2]);
 /// assert_eq!(bitmap, 0b_0110_0000);
-/// 
+///
 /// ```
 #[macro_export]
-macro_rules! set { 
+macro_rules! set {
     ($bitmap: tt, $ty: ty, [$( $bit_pos: tt),*]) => {
         {
             ($bitmap as $ty) | $( ((1 as $ty) << $bit_pos) | )* (0 as $ty)
@@ -161,7 +161,7 @@ macro_rules! set {
 
     ($bitmap: tt, $ty: ty, rev [$( $bit_pos: tt),*]) => {
         {
-            ($bitmap as $ty) 
+            ($bitmap as $ty)
                 | $( ((1 as $ty) << ($crate::max_bits!(type = ($ty)) - $bit_pos - 1)) | )* (0 as $ty)
         }
     };
@@ -237,4 +237,4 @@ macro_rules! set {
     (in $bitmap: ident, $ty: ty, $bit_pos: tt) => {
         $bitmap |= (1 as $ty) << $bit_pos;
     };
-} 
+}

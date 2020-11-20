@@ -4,7 +4,7 @@ use bit_fiddler::max_bits;
 fn max_bits_for_ident() {
     let bitmap: u128 = 9;
     let max_bits = max_bits!(bitmap);
-    
+
     assert_eq!(max_bits, 128);
 }
 
