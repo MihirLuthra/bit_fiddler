@@ -1,6 +1,4 @@
-//use bit_fiddler::is_set;
-
-use bit_fiddler::*;
+use bit_fiddler::is_set;
 
 #[test]
 fn is_set_single_bit() {
