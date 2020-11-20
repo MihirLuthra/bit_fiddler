@@ -73,6 +73,18 @@
 /// ```
 #[macro_export]
 macro_rules! is_set {
+    ($bitmap: tt, $ty: ty, [..]) => {
+        {
+            $bitmap == !0
+        }
+    };
+
+    ($bitmap: tt, $ty: ty, rev [..]) => {
+        {
+            $bitmap == !0
+        }
+    };
+
     ($bitmap: tt, $ty: ty, [$( $bit_pos: tt),*]) => {
         {
             let bits_to_check = ($( ((1 as $ty) << $bit_pos) | )* (0 as $ty));
@@ -95,6 +107,20 @@ macro_rules! is_set {
         }
     };
 
+    ($bitmap: tt, $ty: ty, [$start_pos: tt ..]) => {
+        {
+            let mask = $crate::mask!([$start_pos..], ($ty));
+            ($bitmap & mask) == mask
+        }
+    };
+
+    ($bitmap: tt, $ty: ty, [.. $end_pos: tt]) => {
+        {
+            let mask = $crate::mask!([..$end_pos], ($ty));
+            ($bitmap & mask) == mask
+        }
+    };
+
     ($bitmap: tt, $ty: ty, [start = $start_pos: tt, count = $count: tt]) => {
         {
             let mask = $crate::mask!([start = $start_pos, count = $count], ($ty));
@@ -105,6 +131,20 @@ macro_rules! is_set {
     ($bitmap: tt, $ty: ty, rev [$start_pos: tt .. $end_pos: tt]) => {
         {
             let mask = $crate::mask!(rev [$start_pos..$end_pos], ($ty));
+            ($bitmap & mask) == mask
+        }
+    };
+
+    ($bitmap: tt, $ty: ty, rev [$start_pos: tt ..]) => {
+        {
+            let mask = $crate::mask!(rev [$start_pos..], ($ty));
+            ($bitmap & mask) == mask
+        }
+    };
+
+    ($bitmap: tt, $ty: ty, rev [.. $end_pos: tt]) => {
+        {
+            let mask = $crate::mask!(rev [..$end_pos], ($ty));
             ($bitmap & mask) == mask
         }
     };

@@ -58,6 +58,26 @@ fn set_range() {
 
     set!(in bitmap, u8, [1..5]);
     assert_eq!(bitmap, 0b_0001_1110);
+
+    let res = set!(0, u8, [..5]);
+    assert_eq!(res, 0b_0001_1111);
+
+    let res = set!(0, u8, [3..]);
+    assert_eq!(res, 0b_1111_1000);
+
+    assert_eq!(set!(0, u8, [..]), u8::MAX);
+
+    let mut bitmap = 0;
+    set!(in bitmap, u8, [..5]);
+    assert_eq!(bitmap, 0b_0001_1111);
+
+    let mut bitmap = 0;
+    set!(in bitmap, u8, [3..]);
+    assert_eq!(bitmap, 0b_1111_1000);
+
+    let mut bitmap = 0;
+    set!(in bitmap, u8, [..]);
+    assert_eq!(bitmap, u8::MAX);
 }
 
 #[test]
@@ -70,6 +90,26 @@ fn set_range_rev() {
 
     set!(in bitmap, u8, rev [0..1]);
     assert_eq!(bitmap, 0b_1000_0000);
+
+    let res = set!(0, u8, rev [..5]);
+    assert_eq!(res, 0b_1111_1000);
+
+    let res = set!(0, u8, rev [3..]);
+    assert_eq!(res, 0b_0001_1111);
+
+    assert_eq!(set!(0, u8, rev [..]), u8::MAX);
+
+    let mut bitmap = 0;
+    set!(in bitmap, u8, rev [..5]);
+    assert_eq!(bitmap, 0b_1111_1000);
+
+    let mut bitmap = 0;
+    set!(in bitmap, u8, rev [3..]);
+    assert_eq!(bitmap, 0b_0001_1111);
+
+    let mut bitmap = 0;
+    set!(in bitmap, u8, rev [..]);
+    assert_eq!(bitmap, u8::MAX);
 }
 
 #[test]

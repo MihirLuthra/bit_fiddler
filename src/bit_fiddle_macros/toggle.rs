@@ -148,6 +148,30 @@
 /// ```
 #[macro_export]
 macro_rules! toggle {
+    ($bitmap: tt, $ty: ty, [..]) => {
+        {
+            !($bitmap)
+        }
+    };
+
+    (in $bitmap: ident, $ty: ty, [..]) => {
+        {
+            $bitmap = !($bitmap);
+        }
+    };
+
+    ($bitmap: tt, $ty: ty, rev [..]) => {
+        {
+            !($bitmap)
+        }
+    };
+
+    (in $bitmap: ident, $ty: ty, rev [..]) => {
+        {
+            $bitmap = !($bitmap);
+        }
+    };
+
     ($bitmap: tt, $ty: ty, [$( $bit_pos: tt),*]) => {
         {
             ($bitmap as $ty) ^ ($( ((1 as $ty) << $bit_pos) | )* (0 as $ty))
@@ -176,8 +200,32 @@ macro_rules! toggle {
         }
     };
 
+    ($bitmap: tt, $ty: ty, [.. $end_pos: tt]) => {
+        {
+            let mask = $crate::mask!([..($end_pos)], ($ty));
+            $bitmap ^ mask
+        }
+    };
+
+    ($bitmap: tt, $ty: ty, [$start_pos: tt ..]) => {
+        {
+            let mask = $crate::mask!([($start_pos)..], ($ty));
+            $bitmap ^ mask
+        }
+    };
+
     (in $bitmap: ident, $ty: ty, [$start_pos: tt .. $end_pos: tt]) => {
         let mask = $crate::mask!([($start_pos)..($end_pos)], ($ty));
+        $bitmap ^= mask;
+    };
+
+    (in $bitmap: ident, $ty: ty, [$start_pos: tt ..]) => {
+        let mask = $crate::mask!([($start_pos)..], ($ty));
+        $bitmap ^= mask;
+    };
+
+    (in $bitmap: ident, $ty: ty, [.. $end_pos: tt]) => {
+        let mask = $crate::mask!([..($end_pos)], ($ty));
         $bitmap ^= mask;
     };
 
@@ -200,8 +248,32 @@ macro_rules! toggle {
         }
     };
 
+    ($bitmap: tt, $ty: ty, rev [.. $end_pos: tt]) => {
+        {
+            let mask = $crate::mask!(rev [..($end_pos)], ($ty));
+            $bitmap ^ mask
+        }
+    };
+
+    ($bitmap: tt, $ty: ty, rev [$start_pos: tt ..]) => {
+        {
+            let mask = $crate::mask!(rev [($start_pos)..], ($ty));
+            $bitmap ^ mask
+        }
+    };
+
     (in $bitmap: ident, $ty: ty, rev [$start_pos: tt .. $end_pos: tt]) => {
         let mask = $crate::mask!(rev [($start_pos)..($end_pos)], ($ty));
+        $bitmap ^= mask;
+    };
+
+    (in $bitmap: ident, $ty: ty, rev [$start_pos: tt ..]) => {
+        let mask = $crate::mask!(rev [($start_pos)..], ($ty));
+        $bitmap ^= mask;
+    };
+
+    (in $bitmap: ident, $ty: ty, rev [.. $end_pos: tt]) => {
+        let mask = $crate::mask!(rev [..($end_pos)], ($ty));
         $bitmap ^= mask;
     };
 

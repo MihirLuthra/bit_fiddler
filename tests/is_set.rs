@@ -51,6 +51,24 @@ fn is_set_range() {
 
     let res = is_set!(0b_0110_1100, u8, [2..4]);
     assert_eq!(res, true);
+
+    let res = is_set!(0b_1111_1000, u8, [3..]);
+    assert_eq!(res, true);
+
+    let res = is_set!(0b_1111_1000, u8, [2..]);
+    assert_eq!(res, false);
+
+    let res = is_set!(0b_0110_1111, u8, [..4]);
+    assert_eq!(res, true);
+
+    let res = is_set!(0b_0110_1111, u8, [..5]);
+    assert_eq!(res, false);
+
+    let res = is_set!((!0), u8, [..]);
+    assert_eq!(res, true);
+
+    let res = is_set!(0b_0111_1111, u8, [..]);
+    assert_eq!(res, false);
 }
 
 #[test]
@@ -61,6 +79,24 @@ fn is_set_range_rev() {
     assert_eq!(res, true);
 
     let res = is_set!(0b_0110_1100, u8, rev[2..4]);
+    assert_eq!(res, false);
+
+    let res = is_set!(0b_0001_1111, u8, rev [3..]);
+    assert_eq!(res, true);
+
+    let res = is_set!(0b_0001_1111, u8, rev [2..]);
+    assert_eq!(res, false);
+
+    let res = is_set!(0b_1111_0110, u8, rev [..4]);
+    assert_eq!(res, true);
+
+    let res = is_set!(0b_1111_0110, u8, rev [..5]);
+    assert_eq!(res, false);
+
+    let res = is_set!((!0), u8, rev [..]);
+    assert_eq!(res, true);
+
+    let res = is_set!(0b_0111_1111, u8, rev [..]);
     assert_eq!(res, false);
 }
 

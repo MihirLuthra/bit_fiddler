@@ -62,6 +62,33 @@ fn unset_range() {
 
     unset!(in bitmap, u8, [2..6]);
     assert_eq!(bitmap, 0b_1100_0011);
+
+    let mut bitmap: u8 = 0b_1111_1111;
+
+    let res = unset!(bitmap, u8, [3..]);
+    assert_eq!(res, 0b_0000_0111);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    unset!(in bitmap, u8, [0..]);
+    assert_eq!(bitmap, 0);
+
+    bitmap = 0b_1111_1111;
+
+    let res = unset!(bitmap, u8, [..5]);
+    assert_eq!(res, 0b_1110_0000);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    unset!(in bitmap, u8, [..8]);
+    assert_eq!(bitmap, 0);
+
+    bitmap = 0b_1111_1111;
+
+    let res = unset!(bitmap, u8, [..]);
+    assert_eq!(res, 0);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    unset!(in bitmap, u8, [..]);
+    assert_eq!(bitmap, 0);
 }
 
 #[test]
@@ -75,6 +102,33 @@ fn unset_range_rev() {
     bitmap = 0b_1000_0000;
 
     unset!(in bitmap, u8, rev [0..1]);
+    assert_eq!(bitmap, 0);
+
+    let mut bitmap: u8 = 0b_1111_1111;
+
+    let res = unset!(bitmap, u8, rev [3..]);
+    assert_eq!(res, 0b_1110_0000);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    unset!(in bitmap, u8, rev [0..]);
+    assert_eq!(bitmap, 0);
+
+    bitmap = 0b_1111_1111;
+
+    let res = unset!(bitmap, u8, rev [..5]);
+    assert_eq!(res, 0b_0000_0111);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    unset!(in bitmap, u8, rev [..8]);
+    assert_eq!(bitmap, 0);
+
+    bitmap = 0b_1111_1111;
+
+    let res = unset!(bitmap, u8, rev [..]);
+    assert_eq!(res, 0);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    unset!(in bitmap, u8, rev [..]);
     assert_eq!(bitmap, 0);
 }
 

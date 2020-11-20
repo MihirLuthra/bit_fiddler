@@ -58,10 +58,35 @@ fn toggle_range() {
     assert_eq!(res, 0);
     assert_eq!(bitmap, 0b_1111_1111);
 
-    bitmap = 0b_1111_1111;
-
     toggle!(in bitmap, u8, [2..6]);
     assert_eq!(bitmap, 0b_1100_0011);
+
+    bitmap = 0b_1111_1111;
+
+    let res = toggle!(bitmap, u8, [1..]);
+    assert_eq!(res, 0b_0000_0001);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    toggle!(in bitmap, u8, [0..]);
+    assert_eq!(bitmap, 0);
+
+    bitmap = 0b_1111_1111;
+
+    let res = toggle!(bitmap, u8, [..5]);
+    assert_eq!(res, 0b_1110_0000);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    toggle!(in bitmap, u8, [..8]);
+    assert_eq!(bitmap, 0);
+
+    bitmap = 0b_1111_1111;
+
+    let res = toggle!(bitmap, u8, [..]);
+    assert_eq!(res, 0);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    toggle!(in bitmap, u8, [..]);
+    assert_eq!(bitmap, 0);
 }
 
 #[test]
@@ -72,9 +97,34 @@ fn toggle_range_rev() {
     assert_eq!(res, 0);
     assert_eq!(bitmap, 0b_0111_1111);
 
-    bitmap = 0b_1000_0000;
-
     toggle!(in bitmap, u8, rev [0..1]);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    bitmap = 0b_1111_1111;
+
+    let res = toggle!(bitmap, u8, rev [1..]);
+    assert_eq!(res, 0b_1000_0000);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    toggle!(in bitmap, u8, rev [0..]);
+    assert_eq!(bitmap, 0);
+
+    bitmap = 0b_1111_1111;
+
+    let res = toggle!(bitmap, u8, rev [..5]);
+    assert_eq!(res, 0b_0000_0111);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    toggle!(in bitmap, u8, [..8]);
+    assert_eq!(bitmap, 0);
+
+    bitmap = 0b_1111_1111;
+
+    let res = toggle!(bitmap, u8, rev [..]);
+    assert_eq!(res, 0);
+    assert_eq!(bitmap, 0b_1111_1111);
+
+    toggle!(in bitmap, u8, rev [..]);
     assert_eq!(bitmap, 0);
 }
 
