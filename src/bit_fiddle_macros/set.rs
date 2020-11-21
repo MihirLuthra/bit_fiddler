@@ -57,11 +57,6 @@
 /// assert_eq!(bitmap, 0b_0010_0100);
 /// ```
 ///
-/// # Setting Bit Ranges
-/// `[<start_pos>..<end_pos>]` and `[start = <start_pos>, count = <count>]`
-/// patterns are used for setting range of bits.
-/// If range has 0 bits (e.g., [3..3] or [start = 3, count = 0]), the behaviour is undefined and may panic.
-///
 /// # Examples
 /// ```
 /// use bit_fiddler::set;

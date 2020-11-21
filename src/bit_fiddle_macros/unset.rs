@@ -56,10 +56,6 @@
 /// unset!(in bitmap, u8, rev 2);
 /// assert_eq!(bitmap, 0b_0000_0000);
 /// ```
-/// # Unsetting Bit Ranges
-/// `[<start_pos>..<end_pos>]` and `[start = <start_pos>, count = <count>]`
-/// patterns are used for unsetting range of bits.
-/// If range has 0 bits (e.g., [3..3] or [start = 3, count = 0]), the behaviour is undefined and may panic.
 ///
 /// # Examples
 /// ```
